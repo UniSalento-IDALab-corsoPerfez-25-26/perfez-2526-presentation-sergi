@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Un dato in più. Serve davvero?</title>
+<meta name="description" content="Tesina del Corso di Perfezionamento in Tecnologie Digitali per Ambienti e Sistemi Intelligenti, Università del Salento: aggiungere un dato produttivo migliora le previsioni dei consumi energetici industriali? 18 casi, due impianti, una risposta onesta.">
+<meta name="theme-color" content="#121a28">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Un dato in più. Serve davvero?">
+<meta property="og:description" content="Aggiungere un dato di produzione migliora le previsioni dei consumi energetici industriali? 18 casi, due impianti, una risposta onesta. Tesina di Anna Sergi, Università del Salento.">
+<meta property="og:locale" content="it_IT">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23121a28'/%3E%3Cpath d='M5 21l6-6 5 4 11-10' fill='none' stroke='%23f0a35e' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script>document.documentElement.className+=' js';</script>
+<style>
+:root{
+  --paper:#ffffff; --paper2:#eef0f3; --ink:#17202e; --muted:#5f6674; --line:#dde1e7;
+  --good:#2b7a57; --bad:#b4432f; --flat:#8b8f98; --accent:#d9722b; --glow:#f0a35e; --night:#121a28; --night2:#1b2536;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(22px,env(safe-area-inset-left));padding-right:max(22px,env(safe-area-inset-right))}
+.serif{font-family:Fraunces,Georgia,serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500}
+.kicker{font:500 12px/1 "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:#b85a1c;margin:0 0 14px}
+.hero .kicker{color:var(--glow)}
+.note{font:500 11px/1.4 "JetBrains Mono",monospace;color:var(--muted);letter-spacing:.04em}
+
+/* progress + rail */
+.progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--accent),var(--glow));z-index:50}
+.rail{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:40;display:none}
+.rail ol{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.rail a{display:flex;align-items:center;justify-content:flex-end;gap:10px;text-decoration:none}
+.rail a span{font:500 11px/1 "JetBrains Mono",monospace;background:var(--ink);color:#f3eee4;padding:5px 8px;border-radius:5px;opacity:0;transform:translateX(6px);transition:.2s;white-space:nowrap;pointer-events:none}
+.rail a i{width:10px;height:10px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);transition:.2s}
+.rail a:hover span,.rail a:focus-visible span{opacity:1;transform:none}
+.rail a.on i{background:var(--accent);border-color:var(--accent);transform:scale(1.3)}
+.rail.dark a i{border-color:#8f98a8;background:transparent}
+@media(min-width:1240px){.rail{display:block}}
+
+/* reveal */
+.js .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.js .rv.in{opacity:1;transform:none}
+
+/* hero */
+.hero{background:var(--night);color:#f3eee4;padding:clamp(28px,5vw,48px) 0 0;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(700px 420px at 85% 30%,rgba(240,163,94,.16),transparent 70%),
+  linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/100% 44px,
+  linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px) 0 0/44px 100%;pointer-events:none}
+.hero .wrap{position:relative}
+.logos{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin:0 0 clamp(30px,5vw,56px)}
+.logos img{display:block;height:64px;width:auto}
+.logos .pt{background:#fff;border-radius:10px;padding:7px 12px}
+.logos .pt img{height:50px}
+@media(max-width:520px){.logos img{height:46px}.logos .pt img{height:36px}}
+.herogrid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.85fr);gap:clamp(24px,4vw,56px);align-items:center}
+.hero h1{font:700 clamp(44px,5.6vw,82px)/.98 Fraunces,Georgia,serif;margin:0 0 26px;letter-spacing:-.025em}
+.hero h1 span{white-space:nowrap}
+@media(max-width:900px){.herogrid{grid-template-columns:1fr}.hero h1{font-size:clamp(44px,10vw,92px)}}
+.hero h1 em{font-style:italic;color:var(--glow);font-weight:500}
+.hero p.sub{font-size:clamp(18px,2.1vw,21px);max-width:30em;color:#c8c3b6;margin:0 0 26px}
+.hero p.sub b{color:#f3eee4;font-weight:600}
+.hero .meta{font:500 13px/1.6 "JetBrains Mono",monospace;color:#8f98a8;margin:0 0 26px}
+.hero .meta b{color:#f3eee4;font-weight:500}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+.cta a{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:999px;text-decoration:none;font-weight:600;font-size:15px;border:1.5px solid #3a465e;color:#f3eee4;transition:.15s}
+.cta a:first-child{background:var(--glow);border-color:var(--glow);color:var(--ink)}
+.cta a:hover{transform:translateY(-2px)}
+.art{position:relative;background:var(--night2);border:1px solid #2a3446;border-radius:18px;padding:18px 18px 12px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+.art svg{display:block;width:100%;height:auto}
+.art .cap{display:flex;justify-content:space-between;gap:10px;margin-top:8px;font:500 10.5px/1.3 "JetBrains Mono",monospace;color:#7f889a}
+.art .lg{display:flex;gap:14px;flex-wrap:wrap}
+.art .lg span::before{content:"";display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:3px;background:var(--c)}
+.drawline{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 3.2s ease-out .3s forwards}
+.drawline.b{animation-delay:1.1s}.drawline.c{animation-delay:1.8s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pulse{animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.stats{margin-top:clamp(36px,6vw,64px);border-top:1px solid #2a3446;display:grid;grid-template-columns:repeat(5,1fr)}
+.stats div{padding:20px 14px 26px;border-right:1px solid #2a3446}
+.stats div:last-child{border-right:0}
+.stats b{display:block;font:700 clamp(34px,5vw,54px)/1 Fraunces,Georgia,serif;color:#f3eee4}
+.stats div:last-child b{color:var(--glow)}
+.stats span{font:500 11.5px/1.3 "JetBrains Mono",monospace;color:#8f98a8;text-transform:uppercase;letter-spacing:.08em}
+@media(max-width:700px){.stats{grid-template-columns:repeat(3,1fr)}.stats div:nth-child(3){border-right:0}.stats div:nth-child(n+4){border-top:1px solid #2a3446}}
+
+/* section heads */
+section{padding:clamp(44px,6vw,72px) 0 0;scroll-margin-top:10px}
+.head{display:grid;grid-template-columns:auto 1fr;gap:clamp(14px,2.5vw,28px);align-items:start;margin-bottom:8px}
+.head .big{font:700 clamp(56px,9vw,112px)/.8 Fraunces,Georgia,serif;color:transparent;-webkit-text-stroke:1.5px #b9c0cb;letter-spacing:-.04em;margin-top:2px}
+.head .big.acc{-webkit-text-stroke-color:#b9c0cb}
+@media(max-width:560px){.head{grid-template-columns:1fr}.head .big{font-size:56px}}
+h2{font:700 clamp(30px,4.8vw,50px)/1.06 Fraunces,Georgia,serif;margin:0 0 18px;letter-spacing:-.015em;text-wrap:balance;max-width:19em}
+h2 em{font-style:italic;font-weight:500;color:var(--ink)}
+h3{font:700 22px/1.25 Fraunces,Georgia,serif;margin:0 0 8px}
+p{margin:0 0 16px;max-width:none}
+.lead{font-size:19px;color:#2b3445}
+section+section{border-top:1px solid var(--line);margin-top:clamp(44px,6vw,72px)}
+.small{font-size:14px;color:var(--muted)}
+.num{font:500 13px/1 "JetBrains Mono",monospace;color:var(--muted);letter-spacing:.08em}
+.pull{border-left:6px solid var(--accent);padding:6px 0 6px 20px;margin:34px 0 0;font:500 clamp(22px,3.3vw,31px)/1.25 Fraunces,Georgia,serif;max-width:26em}
+.pull.ink{border-color:var(--ink)}
+
+/* generic cards / panels */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:22px}
+.card{background:#fff;border:2px solid var(--ink);border-radius:14px;padding:22px;min-width:0}
+.card p{max-width:none}
+.panel{background:#fff;border:2px solid var(--ink);border-radius:14px;padding:22px;margin-top:22px}
+.card svg.ill{width:100%;height:auto;display:block;border-radius:10px;margin:0 0 16px;border:2px solid var(--ink)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.chip{font:500 12px/1 "JetBrains Mono",monospace;padding:6px 9px;border-radius:6px;background:var(--paper2)}
+.chip.new{background:var(--accent);color:#fff}
+.chip.dk{background:var(--ink);color:#f3eee4}
+
+/* analogy */
+.analogy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center;margin-top:8px}
+@media(max-width:820px){.analogy{grid-template-columns:1fr}}
+.analogy svg{width:100%;height:auto;display:block;border:2px solid var(--ink);border-radius:14px}
+
+/* duel A/B */
+.duel{display:grid;grid-template-columns:1fr auto 1fr;gap:0;margin-top:26px;border:2px solid var(--ink);border-radius:16px;overflow:hidden;background:#fff}
+.duel>div{padding:22px 24px;min-width:0}
+.duel .vs{display:flex;align-items:center;justify-content:center;background:var(--ink);color:var(--glow);font:italic 500 26px/1 Fraunces,Georgia,serif;padding:0 14px}
+.duel .b{background:#fdf6ee}
+.duel svg{width:100%;max-width:230px;height:auto;display:block;margin:0 auto 10px}
+.duel .lab{font:700 54px/1 Fraunces,Georgia,serif;margin:0 0 6px}
+@media(max-width:700px){.duel{grid-template-columns:1fr}.duel .vs{padding:10px}}
+</style>
+<style>
+.funnel{display:grid;gap:14px}
+.fstage{display:grid;grid-template-columns:minmax(0,230px) 1fr 56px;gap:16px;align-items:center}
+.fstage .fl{font-size:14px;line-height:1.35}
+.fstage .fl b{display:block;font:500 11px/1 "JetBrains Mono",monospace;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.fdots{display:grid;grid-template-columns:repeat(18,minmax(0,1fr));gap:4px}
+.fdots i{display:block;aspect-ratio:1;border-radius:50%;background:var(--paper2);transition:background .5s,transform .5s}
+.fdots i.on{background:var(--ink)}
+.fdots i.win{background:var(--accent);transform:scale(1.15)}
+.fstage .fn{font:700 34px/1 Fraunces,Georgia,serif;text-align:right}
+.fstage .who{grid-column:2/4;font:500 11.5px/1.4 "JetBrains Mono",monospace;color:var(--muted);margin-top:-8px}
+@media(max-width:640px){.fstage{grid-template-columns:1fr 48px}.fstage .fl{grid-column:1/3}.fstage .who{grid-column:1/3}}
+
+/* tiles */
+.tilewrap{margin-top:26px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:start}
+@media(max-width:860px){.tilewrap{grid-template-columns:1fr}}
+.tiles{display:grid;grid-template-columns:96px repeat(3,minmax(0,72px));gap:7px;justify-content:start}
+.tiles .h{font:500 12px/1.2 "JetBrains Mono",monospace;color:var(--muted);padding:6px 2px;align-self:end}
+.tiles .rl{font:500 12px/1.25 "JetBrains Mono",monospace;display:flex;align-items:center;color:var(--ink)}
+.tiles .rl small{display:block;color:var(--muted);font-size:11px}
+.tiles .sep{grid-column:1/-1;height:4px}
+.tile{all:unset;box-sizing:border-box;cursor:pointer;aspect-ratio:1.15/1;border-radius:9px;display:flex;align-items:center;justify-content:center;font:700 14px/1 Fraunces,Georgia,serif;color:var(--ink);position:relative;transition:transform .12s}
+.tile:hover{transform:translateY(-2px)}
+.tile:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.tile.sel{outline:3px solid var(--ink);outline-offset:2px}
+.tile.win::after{content:"";position:absolute;inset:-5px;border:3px solid var(--accent);border-radius:14px;pointer-events:none}
+.tile sup{font-size:11px;margin-left:1px}
+.detail{background:#fff;border:2px solid var(--ink);border-radius:14px;padding:22px;position:sticky;top:20px;min-height:230px}
+.detail .where{font:500 12px/1.3 "JetBrains Mono",monospace;color:var(--muted);margin:0 0 6px;text-transform:uppercase;letter-spacing:.08em}
+.detail .bignum{font:700 56px/1 Fraunces,Georgia,serif;margin:0 0 10px}
+.bignum.good{color:var(--good)} .bignum.bad{color:var(--bad)} .bignum.flat{color:var(--flat)}
+.detail .verdict{display:inline-block;font:500 12px/1 "JetBrains Mono",monospace;padding:6px 9px;border-radius:6px;margin-bottom:12px}
+.verdict.yes{background:var(--good);color:#fff} .verdict.no{background:var(--paper2)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+
+/* esame */
+.story{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:24px;border:2px solid var(--ink);border-radius:16px;overflow:hidden}
+.story>div{padding:20px 22px;background:#fff;position:relative}
+.story>div+div{border-left:2px solid var(--ink)}
+.story>div:last-child{background:var(--ink);color:#f3eee4}
+.story .num{display:block;margin-bottom:8px}
+.story>div:last-child .num{color:#8f98a8}
+.story b{display:block;font:700 clamp(34px,4.4vw,46px)/1 Fraunces,Georgia,serif;margin-bottom:10px}
+.story>div:last-child b{color:var(--glow)}
+.story p{margin:0;font-size:15px}
+.story>div:not(:last-child)::after{content:"→";position:absolute;right:-15px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;z-index:2}
+@media(max-width:760px){.story{grid-template-columns:1fr}.story>div+div{border-left:0;border-top:2px solid var(--ink)}.story>div:not(:last-child)::after{right:auto;left:50%;top:auto;bottom:-15px;transform:translateX(-50%) rotate(90deg)}}
+.holds{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+.holds .card{padding:18px 20px}
+.holds h3{font-size:18px;display:flex;align-items:center;gap:10px}
+.holds h3 i{font-style:normal;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font:700 14px/1 Inter,sans-serif}
+.holds ul{margin:6px 0 0;padding-left:18px;font-size:15px}
+.holds li{margin:4px 0}
+@media(max-width:700px){.holds{grid-template-columns:1fr}}
+
+/* redundancy */
+.redu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:24px}
+@media(max-width:700px){.redu{grid-template-columns:1fr}}
+.redu .card{text-align:center}
+.redu svg{width:100%;max-width:300px;height:auto;display:block;margin:0 auto 6px}
+.redu .eff{font:700 34px/1 Fraunces,Georgia,serif;margin:6px 0 4px}
+.redu p{font-size:15px;margin:0 auto;max-width:28em}
+
+/* algoritmi */
+.algos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.algos div{border:2px solid var(--ink);border-radius:12px;padding:14px 16px;background:#fff}
+.algos b{display:block;font:700 19px/1.2 Fraunces,Georgia,serif;margin-bottom:4px}
+.algos span{display:block;font-size:14.5px;line-height:1.45;color:#3a4252}
+@media(max-width:700px){.algos{grid-template-columns:1fr}}
+/* takeaway */
+.more{display:inline-block;font-weight:600;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--accent);padding-bottom:2px}
+.more:hover{color:#b85a1c}
+.funnel{margin-top:4px}
+.rule{margin-top:20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:2px solid var(--ink);border-radius:16px;overflow:hidden}
+.rule div{padding:18px 20px;background:#fff;position:relative}
+.rule div+div{border-left:2px solid var(--ink)}
+.rule div:last-child{background:var(--ink);color:#f3eee4}
+.rule .num{display:block;margin-bottom:6px;color:var(--accent)}
+.rule p{margin:0;font-size:15px}
+@media(max-width:700px){.rule{grid-template-columns:1fr}.rule div+div{border-left:0;border-top:2px solid var(--ink)}}
+
+/* architecture */
+.strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:22px}
+.strip div{border:2px solid var(--ink);border-radius:12px;padding:12px 12px 14px;background:#fff}
+.strip div.done{background:var(--ink);color:#f3eee4}
+.strip div.plan{border-style:dashed}
+.strip b{display:block;font:700 22px/1 Fraunces,Georgia,serif;margin-bottom:6px}
+.strip span{display:block;font-size:13.5px;line-height:1.3;font-weight:600}
+.strip em{display:block;font:500 10.5px/1.3 "JetBrains Mono",monospace;font-style:normal;margin-top:8px;color:var(--muted)}
+.strip div.done em{color:var(--glow)}
+@media(max-width:760px){.strip{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* repos */
+.cards.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:640px){.cards.c2{grid-template-columns:1fr}}
+a.card{display:block;text-decoration:none;transition:transform .12s,box-shadow .12s}
+a.card:hover{transform:translateY(-3px);box-shadow:6px 6px 0 var(--ink)}
+a.card .u{font:500 12px/1.4 "JetBrains Mono",monospace;color:var(--muted);word-break:break-all}
+a.card .lv{font:500 11px/1 "JetBrains Mono",monospace;background:var(--paper2);padding:5px 8px;border-radius:6px;display:inline-block;margin-bottom:12px}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btns a{display:inline-block;padding:12px 18px;border-radius:999px;background:var(--ink);color:#fff;text-decoration:none;font-weight:600;font-size:15px;transition:transform .12s}
+.btns a:hover{transform:translateY(-2px)}
+.btns a.alt{background:var(--accent)}
+footer{margin-top:96px;background:var(--night);color:#9ea6b5;padding:34px 0 44px;font-size:14px}
+footer b{color:#f3eee4;font-weight:500}
+</style>
+</head>
+<body>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<nav class="rail dark" id="rail" aria-label="Capitoli">
+  <ol>
+    <li><a href="#domanda"><span>01 · La domanda</span><i></i></a></li>
+    <li><a href="#dati"><span>02 · I due impianti</span><i></i></a></li>
+    <li><a href="#risultati"><span>03 · I risultati</span><i></i></a></li>
+    <li><a href="#esame"><span>04 · Sotto esame</span><i></i></a></li>
+    <li><a href="#perche"><span>05 · Perché</span><i></i></a></li>
+    <li><a href="#codice"><span>06 · Sistema e codice</span><i></i></a></li>
+  </ol>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="logos"><img src="assets/logo_unisalento.png" alt="Università del Salento"><span class="pt"><img src="assets/logo_patto_territoriale.png" alt="Patto territoriale, Sistema universitario pugliese"></span></div>
+    <div class="herogrid">
+      <div>
+        <p class="kicker">Tesina · Proposta 15 · A.A. 2025/2026</p>
+        <h1><span>Un dato in più.</span><br><em>Serve davvero?</em></h1>
+        <p class="sub">Nelle fabbriche si raccolgono sempre più dati. Ma sapere che cosa sta producendo un impianto aiuta davvero a prevedere quanta energia consumerà? Questo progetto mette alla prova l’idea, con dati reali e <b>senza scorciatoie</b>.</p>
+        <p class="meta"><b>Anna Sergi</b> · Corso di Perfezionamento in Tecnologie Digitali per Ambienti e Sistemi Intelligenti · Università del Salento</p>
+        <div class="cta"><a href="#domanda">Inizia da qui ↓</a><a href="documenti/Tesina_previsione_consumi_energetici.pdf">Tesina (PDF)</a><a href="dashboard/index.html">Dashboard</a><a href="#codice">Codice su GitHub</a></div>
+      </div>
+      <div class="art" role="img" aria-label="Illustrazione: lo storico dei consumi e due previsioni, A senza dato produttivo e B con dato produttivo">
+        <svg viewBox="0 0 460 250" aria-hidden="true">
+          <g stroke="#2a3446" stroke-width="1"><line x1="10" y1="40" x2="455" y2="40"/><line x1="10" y1="80" x2="455" y2="80"/><line x1="10" y1="120" x2="455" y2="120"/><line x1="10" y1="160" x2="455" y2="160"/></g>
+          <rect x="280" y="22" width="178" height="150" fill="#f0a35e" opacity=".05"/>
+          <line x1="280" y1="18" x2="280" y2="172" stroke="#8f98a8" stroke-dasharray="3 4"/>
+          <text x="284" y="30" fill="#8f98a8" font-family="JetBrains Mono,monospace" font-size="10">oggi → futuro</text>
+          <text x="12" y="30" fill="#8f98a8" font-family="JetBrains Mono,monospace" font-size="10">consumi passati</text>
+          <path d="M280,104 L300,90 L320,100 L340,82 L360,92 L380,74 L400,86 L420,72 L440,82 L455,70 L455,96 L440,100 L420,92 L400,104 L380,96 L360,108 L340,102 L320,112 L300,106 Z" fill="#f0a35e" opacity=".14"/>
+          <path class="drawline" d="M10,150 L30,140 L50,155 L70,128 L90,138 L110,118 L130,132 L150,110 L170,124 L190,104 L210,120 L230,98 L250,112 L270,96 L280,104" fill="none" stroke="#f3eee4" stroke-width="2.4" stroke-linejoin="round"/>
+          <path class="drawline c" d="M280,104 L300,92 L320,108 L340,86 L360,100 L380,80 L400,96 L420,78 L440,90 L455,76" fill="none" stroke="#f3eee4" stroke-opacity=".35" stroke-width="1.6" stroke-dasharray="2 4"/>
+          <path class="drawline b" d="M280,104 L320,107 L360,103 L400,107 L455,104" fill="none" stroke="#8b8f98" stroke-width="2.4" stroke-dasharray="7 5"/>
+          <path class="drawline b" d="M280,104 L300,98 L320,104 L340,92 L360,98 L380,86 L400,93 L420,84 L440,90 L455,82" fill="none" stroke="#f0a35e" stroke-width="2.8" stroke-linejoin="round"/>
+          <circle cx="280" cy="104" r="5" fill="#f3eee4"/>
+          <g transform="translate(300,186)">
+            <rect x="0" y="22" width="120" height="38" fill="#2a3446"/><path d="M0 22 l20-14 v14 l20-14 v14 l20-14 v14z" fill="#2a3446"/>
+            <rect x="86" y="-6" width="12" height="28" fill="#2a3446"/>
+            <rect x="12" y="34" width="10" height="12" fill="#f0a35e" class="pulse"/><rect x="30" y="34" width="10" height="12" fill="#f0a35e" opacity=".6"/><rect x="48" y="34" width="10" height="12" fill="#f0a35e" class="pulse"/>
+            <circle cx="140" cy="36" r="16" fill="none" stroke="#f0a35e" stroke-width="2"/><path d="M140 36 l9 -8" stroke="#f0a35e" stroke-width="2.4" stroke-linecap="round"/>
+          </g>
+          <path d="M440,206 C452,170 452,140 440,112" fill="none" stroke="#f0a35e" stroke-width="1.4" stroke-dasharray="3 4"/>
+          <text x="12" y="200" fill="#c8c3b6" font-family="JetBrains Mono,monospace" font-size="10">il dato produttivo (portata,</text>
+          <text x="12" y="214" fill="#c8c3b6" font-family="JetBrains Mono,monospace" font-size="10">tipo di carico) entra solo in B →</text>
+        </svg>
+        <div class="cap"><span class="lg"><span style="--c:#8b8f98">A · solo storico</span><span style="--c:#f0a35e">B · storico + dato produttivo</span></span><span>illustrazione</span></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div><b data-count="2">2</b><span>impianti reali</span></div>
+      <div><b data-count="3">3</b><span>algoritmi</span></div>
+      <div><b data-count="3">3</b><span>orizzonti</span></div>
+      <div><b data-count="18">18</b><span>sfide A contro B</span></div>
+      <div><b data-count="1">1</b><span>beneficio rilevante</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+<section id="domanda">
+  <div class="head rv"><span class="big acc" aria-hidden="true">01</span><div><p class="kicker">La domanda</p><h2>Un dato in più aiuta <em>a prevedere i consumi?</em></h2></div></div>
+  <div class="analogy">
+    <div class="rv">
+      <p class="lead">Devi prevedere quanta benzina consumerai la prossima settimana. Puoi guardare solo quanto hai consumato nelle settimane scorse. Oppure puoi guardare anche l’agenda: quanti chilometri dovrai fare.</p>
+      <p class="lead">Se fai sempre lo stesso tragitto casa-lavoro, il passato ti dice già tutto. Se ogni settimana è diversa, l’agenda può fare la differenza.</p>
+      <p class="lead">Ho fatto la stessa domanda all’energia elettrica di due impianti industriali: <strong>sapere che cosa sta producendo l’impianto aiuta a prevedere quanta energia consumerà?</strong></p>
+    </div>
+    <svg class="rv" viewBox="0 0 480 300" role="img" aria-label="Illustrazione: un'auto, l'indicatore della benzina e un'agenda con i chilometri della settimana">
+      <rect width="480" height="300" fill="#e7eef0"/>
+      <rect y="236" width="480" height="64" fill="#17202e"/>
+      <path d="M0 268 H480" stroke="#f3eee4" stroke-width="3" stroke-dasharray="20 14"/>
+      <g transform="translate(36,176)">
+        <path d="M8 52 V34 Q8 26 18 24 L52 20 L80 0 H138 Q150 0 158 10 L176 26 Q190 28 192 40 V52 Z" fill="#d9722b"/>
+        <path d="M60 22 L84 6 H112 V22 Z M118 6 H136 Q144 6 150 14 L158 22 H118 Z" fill="#cfe0e4"/>
+        <circle cx="48" cy="54" r="15" fill="#17202e"/><circle cx="48" cy="54" r="6" fill="#8b8f98"/>
+        <circle cx="154" cy="54" r="15" fill="#17202e"/><circle cx="154" cy="54" r="6" fill="#8b8f98"/>
+        <rect x="182" y="32" width="10" height="6" rx="2" fill="#f0a35e"/>
+      </g>
+      <g transform="translate(118,96)">
+        <path d="M-58 0 A58 58 0 0 1 58 0" fill="none" stroke="#17202e" stroke-width="10" stroke-linecap="round"/>
+        <path d="M-58 0 A58 58 0 0 1 -41 -41" fill="none" stroke="#b4432f" stroke-width="10" stroke-linecap="round"/>
+        <text x="-58" y="22" font-family="JetBrains Mono,monospace" font-size="13" fill="#17202e" text-anchor="middle">E</text>
+        <text x="58" y="22" font-family="JetBrains Mono,monospace" font-size="13" fill="#17202e" text-anchor="middle">F</text>
+        <path d="M0 0 L-26 -40" stroke="#d9722b" stroke-width="4" stroke-linecap="round"/>
+        <circle r="7" fill="#17202e"/>
+        <text x="0" y="26" font-family="Fraunces,Georgia,serif" font-size="22" font-weight="700" fill="#17202e" text-anchor="middle">?</text>
+      </g>
+      <g transform="translate(282,26)">
+        <rect width="166" height="178" rx="10" fill="#fff" stroke="#17202e" stroke-width="2.5"/>
+        <rect width="166" height="30" rx="10" fill="#17202e"/><rect y="20" width="166" height="10" fill="#17202e"/>
+        <text x="83" y="20" fill="#f3eee4" font-family="JetBrains Mono,monospace" font-size="12" text-anchor="middle">AGENDA</text>
+        <g font-family="JetBrains Mono,monospace" font-size="12" fill="#17202e">
+          <text x="14" y="56">lun</text><text x="152" y="56" text-anchor="end">40 km</text>
+          <text x="14" y="80">mar</text><text x="152" y="80" text-anchor="end">40 km</text>
+          <text x="14" y="104">mer</text><text x="152" y="104" text-anchor="end">40 km</text>
+          <text x="14" y="128">gio</text><text x="152" y="128" text-anchor="end">40 km</text>
+        </g>
+        <rect x="8" y="138" width="150" height="26" rx="6" fill="#f0a35e" opacity=".35"/>
+        <text x="14" y="156" font-family="JetBrains Mono,monospace" font-size="12" fill="#b85a1c" font-weight="700">sab</text>
+        <text x="152" y="156" font-family="JetBrains Mono,monospace" font-size="12" fill="#b85a1c" font-weight="700" text-anchor="end">320 km</text>
+      </g>
+      <path d="M276 150 C230 150 205 120 182 104" fill="none" stroke="#17202e" stroke-width="2" stroke-dasharray="4 5"/>
+    </svg>
+  </div>
+  <p class="lead rv" style="margin-top:30px">Per rispondere ho costruito due “previsori” gemelli e li ho messi alla prova sugli stessi periodi. L’unica differenza è il dato produttivo: se B fa meglio, il merito è solo di quel dato.</p>
+  <div class="duel rv">
+    <div>
+      <svg viewBox="0 0 240 150" role="img" aria-label="Il previsore A guarda solo il grafico dei consumi passati">
+        <rect x="8" y="26" width="76" height="62" rx="8" fill="#fff" stroke="#17202e" stroke-width="2"/>
+        <polyline points="16,74 28,62 40,68 52,50 64,58 76,40" fill="none" stroke="#17202e" stroke-width="2.4" stroke-linejoin="round"/>
+        <text x="46" y="20" font-family="JetBrains Mono,monospace" font-size="10" fill="#5f6674" text-anchor="middle">storico</text>
+        <rect x="104" y="46" width="76" height="76" rx="18" fill="#17202e"/>
+        <rect x="116" y="60" width="52" height="26" rx="10" fill="#2a3446"/>
+        <circle cx="130" cy="73" r="5" fill="#8b8f98"/><circle cx="154" cy="73" r="5" fill="#8b8f98"/>
+        <rect x="128" y="96" width="28" height="5" rx="2.5" fill="#8b8f98"/>
+        <line x1="142" y1="46" x2="142" y2="34" stroke="#17202e" stroke-width="3"/><circle cx="142" cy="31" r="5" fill="#8b8f98"/>
+        <rect x="112" y="122" width="16" height="16" rx="4" fill="#17202e"/><rect x="156" y="122" width="16" height="16" rx="4" fill="#17202e"/>
+        <path d="M118 73 L86 60" stroke="#8b8f98" stroke-width="1.6" stroke-dasharray="3 3"/>
+      </svg>
+      <p class="lab">A</p><p>Prevede il consumo dal solo <strong>storico</strong>.</p>
+      <div class="tags"><span class="chip">calendario</span><span class="chip">ritardi del consumo</span></div>
+    </div>
+    <div class="vs" aria-hidden="true">vs</div>
+    <div class="b">
+      <svg viewBox="0 0 240 150" role="img" aria-label="Il previsore B guarda il grafico dei consumi passati e anche un indicatore della produzione">
+        <rect x="8" y="26" width="76" height="62" rx="8" fill="#fff" stroke="#17202e" stroke-width="2"/>
+        <polyline points="16,74 28,62 40,68 52,50 64,58 76,40" fill="none" stroke="#17202e" stroke-width="2.4" stroke-linejoin="round"/>
+        <text x="46" y="20" font-family="JetBrains Mono,monospace" font-size="10" fill="#5f6674" text-anchor="middle">storico</text>
+        <rect x="104" y="46" width="76" height="76" rx="18" fill="#17202e"/>
+        <rect x="116" y="60" width="52" height="26" rx="10" fill="#2a3446"/>
+        <circle cx="130" cy="73" r="5" fill="#f0a35e"/><circle cx="154" cy="73" r="5" fill="#f0a35e"/>
+        <path d="M128 96 q14 8 28 0" fill="none" stroke="#f0a35e" stroke-width="3" stroke-linecap="round"/>
+        <line x1="142" y1="46" x2="142" y2="34" stroke="#17202e" stroke-width="3"/><circle cx="142" cy="31" r="5" fill="#f0a35e"/>
+        <rect x="112" y="122" width="16" height="16" rx="4" fill="#17202e"/><rect x="156" y="122" width="16" height="16" rx="4" fill="#17202e"/>
+        <path d="M118 73 L86 60" stroke="#8b8f98" stroke-width="1.6" stroke-dasharray="3 3"/>
+        <circle cx="205" cy="70" r="20" fill="#fff" stroke="#d9722b" stroke-width="2.5"/><path d="M205 70 l10 -9" stroke="#d9722b" stroke-width="3" stroke-linecap="round"/><circle cx="205" cy="70" r="3" fill="#d9722b"/>
+        <text x="203" y="104" font-family="JetBrains Mono,monospace" font-size="10" fill="#d9722b" text-anchor="middle">produzione</text>
+        <path d="M166 73 L184 71" stroke="#d9722b" stroke-width="1.6" stroke-dasharray="3 3"/>
+      </svg>
+      <p class="lab">B</p><p>Fa lo stesso, ma vede anche il <strong>dato produttivo</strong>.</p>
+      <div class="tags"><span class="chip">calendario</span><span class="chip">ritardi del consumo</span><span class="chip new">+ dato produttivo</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="dati">
+  <div class="head rv"><span class="big" aria-hidden="true">02</span><div><p class="kicker">I due impianti</p><h2>Un depuratore <em>e</em> un’acciaieria.</h2></div></div>
+  <p class="lead rv">Due impianti reali, con dati pubblici, scelti perché molto diversi tra loro. Su ciascuno si fa lo stesso identico confronto.</p>
+  <div class="cards">
+    <div class="card rv"><svg viewBox="0 0 400 210" role="img" aria-label="Illustrazione di un impianto di depurazione" class="ill">
+<rect width="400" height="210" fill="#e3ecea"/>
+<circle cx="330" cy="46" r="22" fill="#f0a35e" opacity=".85"/>
+<rect y="150" width="400" height="60" fill="#c9d6d2"/>
+<rect x="24" y="96" width="92" height="54" fill="#17202e"/><rect x="18" y="88" width="104" height="12" fill="#2a3446"/>
+<rect x="36" y="110" width="14" height="22" fill="#f0a35e"/><rect x="62" y="110" width="14" height="22" fill="#f0a35e"/><rect x="88" y="110" width="14" height="22" fill="#f0a35e"/>
+<ellipse cx="190" cy="168" rx="58" ry="20" fill="#9fb9b6"/><ellipse cx="190" cy="160" rx="58" ry="20" fill="#3d8f9a"/><ellipse cx="190" cy="160" rx="38" ry="12" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2"/><ellipse cx="190" cy="160" rx="18" ry="5" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2"/><line x1="190" y1="160" x2="236" y2="152" stroke="#17202e" stroke-width="3"/>
+<ellipse cx="316" cy="170" rx="54" ry="18" fill="#9fb9b6"/><ellipse cx="316" cy="162" rx="54" ry="18" fill="#3d8f9a"/><path d="M276 162q8-6 16 0t16 0 16 0 16 0 16 0" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2.5"/><path d="M280 170q8-6 16 0t16 0 16 0 16 0" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2"/>
+<rect x="116" y="138" width="22" height="6" fill="#5f6674"/><rect x="236" y="150" width="22" height="6" fill="#5f6674"/>
+<path d="M60 70c0-14 10-22 10-22s10 8 10 22a10 10 0 0 1-20 0z" fill="#3d8f9a"/>
+<circle cx="150" cy="44" r="3" fill="#3d8f9a"/><circle cx="168" cy="30" r="2" fill="#3d8f9a"/>
+</svg>
+      <div class="tags"><span class="chip dk">caso principale</span><span class="chip">5,5 anni</span><span class="chip">1 valore al giorno</span><span class="chip">1.382 righe</span></div>
+      <h3>Il depuratore (WWTP Melbourne)</h3><p>Consumo elettrico di ogni giorno. Dato produttivo: la portata d’acqua in uscita, come media su 30 righe. Manca circa un giorno su tre.</p></div>
+    <div class="card rv"><svg viewBox="0 0 400 210" role="img" aria-label="Illustrazione di un'acciaieria" class="ill">
+<rect width="400" height="210" fill="#2a3446"/>
+<circle cx="70" cy="40" r="20" fill="#3a465e"/><circle cx="104" cy="26" r="14" fill="#3a465e"/><circle cx="140" cy="38" r="24" fill="#34405a"/>
+<rect y="160" width="400" height="50" fill="#121a28"/>
+<rect x="40" y="70" width="22" height="90" fill="#17202e"/><rect x="82" y="50" width="22" height="110" fill="#17202e"/><rect x="36" y="64" width="30" height="8" fill="#0d1420"/><rect x="78" y="44" width="30" height="8" fill="#0d1420"/>
+<rect x="30" y="112" width="190" height="48" fill="#17202e"/>
+<path d="M120 112l30-24h70l0 24z" fill="#0d1420"/>
+<rect x="46" y="128" width="26" height="32" fill="#f0a35e"/><rect x="86" y="128" width="26" height="32" fill="#f0a35e" opacity=".75"/>
+<rect x="150" y="126" width="56" height="34" fill="#0d1420"/><rect x="156" y="132" width="44" height="22" fill="#d9722b"/>
+<circle cx="178" cy="143" r="26" fill="#f0a35e" opacity=".18"/>
+<path d="M250 160V80h6v80zM250 84h100v6H250z" fill="#8b8f98"/><rect x="326" y="90" width="3" height="34" fill="#8b8f98"/><rect x="318" y="124" width="19" height="14" fill="#d9722b"/>
+<rect x="238" y="146" width="130" height="14" fill="#5f6674"/><rect x="250" y="138" width="100" height="8" fill="#8b8f98"/>
+<circle cx="300" cy="122" r="2" fill="#f0a35e"/><circle cx="312" cy="112" r="1.6" fill="#f0a35e"/><circle cx="290" cy="110" r="1.6" fill="#f0a35e"/>
+</svg>
+      <div class="tags"><span class="chip dk">secondo caso</span><span class="chip">1 anno (2018)</span><span class="chip">ogni 15 minuti</span><span class="chip">35.040 righe</span></div>
+      <h3>L’acciaieria (UCI Steel)</h3><p>Consumo ogni 15 minuti. Dato produttivo: il tipo di carico (<span class="mono">Load_Type</span>: leggero, medio, massimo).</p></div>
+  </div>
+  <h3 class="rv" style="margin-top:40px">Tre algoritmi, tre orizzonti</h3>
+  <p class="rv" style="margin:0 0 4px">Su ciascun impianto le versioni A e B sono costruite con tre algoritmi di natura diversa:</p>
+  <div class="algos rv">
+    <div><b>Ridge</b><span>una regressione lineare: la ricetta più semplice.</span></div>
+    <div><b>Random Forest</b><span>tanti alberi di decisione che “votano” insieme: coglie relazioni non lineari.</span></div>
+    <div><b>Prophet</b><span>scompone la serie in tendenza e stagionalità (settimana, anno).</span></div>
+  </div>
+  <p class="rv" style="margin-top:14px">Ognuno prevede a tre distanze: breve, medio e lungo termine (sul depuratore circa 10 giorni, 6 settimane e 8 mesi e mezzo; sull’acciaieria 1 ora, 1 settimana e 1 mese). In tutto: 2 impianti × 3 algoritmi × 3 orizzonti = <strong>18 sfide tra A e B</strong>.</p>
+</section>
+
+<section id="risultati">
+  <div class="head rv"><span class="big acc" aria-hidden="true">03</span><div><p class="kicker">I risultati</p><h2>Diciotto sfide, <em>una sola vinta</em> davvero.</h2></div></div>
+  <p class="lead rv">Prima di guardare i risultati ho fissato tre condizioni, che devono valere insieme: B deve ridurre l’errore di <strong>più del 2%</strong>, il miglioramento deve essere <strong>statisticamente significativo</strong> e B deve battere la <strong>persistenza</strong>, la previsione banale che ripete l’ultimo valore.</p>
+  <div class="panel rv">
+    <div class="funnel" id="funnel"></div>
+    <p class="small" style="margin:14px 0 0">Ogni pallino è una delle 18 sfide.</p>
+  </div>
+  <h3 class="rv" style="margin-top:44px">Tocca una tessera per vedere che cosa è successo in ogni caso</h3>
+  <p class="rv" style="margin:0">Variazione dell’errore con il dato produttivo: <span style="color:var(--good);font-weight:600">verde</span> se migliora, <span style="color:var(--bad);font-weight:600">rosso</span> se peggiora, grigio se trascurabile.</p>
+  <div class="tilewrap rv">
+    <div>
+      <div class="tiles" id="tiles" role="group" aria-label="Variazione del MAE nelle 18 combinazioni"></div>
+      <div class="legend"><span style="--c:var(--good)">B migliora</span><span style="--c:var(--bad)">B peggiora</span><span style="--c:#e7e9ed">trascurabile o non significativa</span><span style="--c:var(--accent)">unico beneficio rilevante</span></div>
+      <p class="small" style="margin-top:10px">* entro ±2% o non significativa · † dipende da un solo fold con poco addestramento</p>
+    </div>
+    <div class="detail" id="detail" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="esame">
+  <div class="head rv"><span class="big" aria-hidden="true">04</span><div><p class="kicker">Il risultato sotto esame</p><h2>Un −5,7% <em>messo alla prova.</em></h2></div></div>
+  <p class="lead rv">Un risultato si giudica da come resiste alle verifiche, non da quanto è grande. Ecco come è cambiato il quadro.</p>
+  <div class="story rv">
+    <div><span class="num">Prima impressione</span><b>6 su 6</b><p>Con un solo periodo di prova B vinceva sempre sul depuratore, fino a −11,3%. Troppo bello per essere vero.</p></div>
+    <div><span class="num">Validazione seria</span><b>1 su 18</b><p>Su cinque periodi di prova resta un solo beneficio: Random Forest, depuratore, lungo termine, −5,7%.</p></div>
+    <div><span class="num">Dopo le verifiche</span><b>≈ 1–6%</b><p>La direzione regge, l’entità si ridimensiona ed è al limite della significatività statistica.</p></div>
+  </div>
+  <div class="holds">
+    <div class="card rv"><h3><i style="background:var(--good)">✓</i>Che cosa regge</h3><ul>
+      <li>cambiando la casualità del modello (da −4,9% a −6,3%);</li>
+      <li>scegliendo la finestra solo sui dati di addestramento (−5,1%);</li>
+      <li>con un secondo algoritmo, sempre a favore di B (da −1,0% a −6,0%).</li></ul></div>
+    <div class="card rv"><h3><i style="background:var(--bad)">✗</i>Che cosa vacilla</h3><ul>
+      <li>con un altro modo di validare il segno si ribalta (+7,7%);</li>
+      <li>il test più severo non conferma la significatività (p = 0,29);</li>
+      <li>il −5,7% dipende soprattutto da un solo blocco di test.</li></ul></div>
+  </div>
+  <p class="rv" style="margin-top:18px"><a class="more" href="dashboard/index.html">Esplora tutti i dettagli nella dashboard →</a></p>
+</section>
+
+<section id="perche">
+  <div class="head rv"><span class="big acc" aria-hidden="true">05</span><div><p class="kicker">Perché, e che cosa significa</p><h2>Forse il passato <em>racconta già</em> quasi tutto.</h2></div></div>
+  <p class="lead rv">Un dato produttivo serve poco se è già contenuto, di fatto, nel passato recente dei consumi. Sull’acciaieria il tipo di carico “somiglia” molto al consumo di un quarto d’ora prima; sul depuratore la portata media somiglia poco al consumo del giorno prima. Come nell’esempio della benzina: sull’acciaieria il dato produttivo è l’agenda di chi fa sempre lo stesso tragitto, il passato lo conteneva già; sul depuratore porta qualcosa di nuovo.</p>
+  <div class="redu">
+    <div class="card rv">
+      <svg viewBox="0 0 300 170" role="img" aria-label="Schema: sull'acciaieria il dato produttivo si sovrappone molto allo storico recente">
+        <circle cx="122" cy="84" r="64" fill="#17202e" opacity=".12" stroke="#17202e" stroke-width="2"/>
+        <circle cx="178" cy="84" r="64" fill="#d9722b" opacity=".2" stroke="#d9722b" stroke-width="2"/>
+        <text x="86" y="88" font-family="JetBrains Mono,monospace" font-size="11" fill="#17202e" text-anchor="middle">storico</text>
+        <text x="216" y="88" font-family="JetBrains Mono,monospace" font-size="11" fill="#b85a1c" text-anchor="middle">Load_Type</text>
+        <text x="150" y="80" font-family="Fraunces,Georgia,serif" font-size="22" font-weight="700" fill="#17202e" text-anchor="middle">0,627</text>
+        <text x="150" y="98" font-family="JetBrains Mono,monospace" font-size="9" fill="#5f6674" text-anchor="middle">correlazione</text>
+      </svg>
+      <h3>Acciaieria</h3>
+      <p class="eff" style="color:var(--flat)">≈ 0</p>
+      <p>Molta sovrapposizione con lo storico recente: Load_Type non aggiunge quasi nulla: con Ridge e Random Forest gli effetti restano entro ±1,7%.</p>
+    </div>
+    <div class="card rv">
+      <svg viewBox="0 0 300 170" role="img" aria-label="Schema: sul depuratore il dato produttivo si sovrappone poco allo storico recente">
+        <circle cx="100" cy="84" r="64" fill="#17202e" opacity=".12" stroke="#17202e" stroke-width="2"/>
+        <circle cx="200" cy="84" r="64" fill="#d9722b" opacity=".2" stroke="#d9722b" stroke-width="2"/>
+        <text x="74" y="88" font-family="JetBrains Mono,monospace" font-size="11" fill="#17202e" text-anchor="middle">storico</text>
+        <text x="226" y="88" font-family="JetBrains Mono,monospace" font-size="11" fill="#b85a1c" text-anchor="middle">portata</text>
+        <text x="150" y="80" font-family="Fraunces,Georgia,serif" font-size="18" font-weight="700" fill="#17202e" text-anchor="middle">0,254</text>
+        <text x="150" y="96" font-family="JetBrains Mono,monospace" font-size="8.5" fill="#5f6674" text-anchor="middle">correlazione</text>
+      </svg>
+      <h3>Depuratore</h3>
+      <p class="eff" style="color:var(--good)">−5,7%</p>
+      <p>Meno sovrapposizione: la portata sembra portare un po’ di informazione nuova, e Random Forest a lungo termine ne approfitta (ma è un solo caso).</p>
+    </div>
+  </div>
+  <p class="small rv" style="margin-top:12px">Schema indicativo; i numeri sono le correlazioni del dato produttivo con il consumo del passo precedente. È un’ipotesi su due soli casi, non una regola: per metterla alla prova servirebbe un terzo impianto con un altro tipo di dato.</p>
+  <h3 class="rv" style="margin-top:40px">Per un’azienda, la regola è semplice</h3>
+  <div class="rule rv" style="margin-top:12px">
+    <div><span class="num">Passo 1</span><p>Raccogli lo storico dei consumi che hai già.</p></div>
+    <div><span class="num">Passo 2</span><p>Fai un confronto A/B come questo sul <strong>tuo</strong> impianto.</p></div>
+    <div><span class="num">Passo 3</span><p>Solo se B vince davvero, investi in nuova sensoristica.</p></div>
+  </div>
+  <p class="pull ink rv">Il valore del lavoro sta meno in un numero e più nel metodo per verificarlo.</p>
+</section>
+
+<section id="codice">
+  <div class="head rv"><span class="big" aria-hidden="true">06</span><div><p class="kicker">Sistema e codice</p><h2>Dall’idea <em>al codice.</em></h2></div></div>
+  <p class="lead rv">Il progetto prevede un’architettura a sei livelli, dai sensori alle decisioni. I quattro centrali sono realizzati nei repository e provati sui dati reali; gli altri due sono progettati.</p>
+  <div class="strip rv">
+    <div class="plan"><b>L1</b><span>Acquisizione</span><em>dataset · IoT progettato</em></div>
+    <div class="done"><b>L2</b><span>Feature</span><em>realizzato</em></div>
+    <div class="done"><b>L3</b><span>Modelli</span><em>realizzato</em></div>
+    <div class="done"><b>L4</b><span>Previsioni</span><em>realizzato</em></div>
+    <div class="done"><b>L5</b><span>Validazione</span><em>realizzato</em></div>
+    <div class="plan"><b>L6</b><span>Decisioni</span><em>progettato</em></div>
+  </div>
+  <h3 class="rv" style="margin-top:40px">Un repository per ogni componente</h3>
+  <div class="cards" style="margin-top:12px">
+    <a class="card rv" href="https://github.com/UniSalento-IDALab-corsoPerfez-25-26/perfez-2526-wwtp-forecasting-sergi"><span class="lv">L2–L5 · caso principale</span><h3>wwtp-forecasting</h3><p>Feature, modelli, validazione e test statistici sul depuratore di Melbourne. Script, risultati e test.</p><span class="u">perfez-2526-wwtp-forecasting-sergi</span></a>
+    <a class="card rv" href="https://github.com/UniSalento-IDALab-corsoPerfez-25-26/perfez-2526-steel-forecasting-sergi"><span class="lv">L2–L5 · secondo caso</span><h3>steel-forecasting</h3><p>Lo stesso confronto A/B su un altro settore, per vedere se il beneficio si ripresenta.</p><span class="u">perfez-2526-steel-forecasting-sergi</span></a>
+    <a class="card rv" href="https://github.com/UniSalento-IDALab-corsoPerfez-25-26/perfez-2526-dashboard-sergi"><span class="lv">lettura dei risultati</span><h3>dashboard</h3><p>Un solo file HTML, anche offline: esplora i risultati dei due repository.</p><span class="u">perfez-2526-dashboard-sergi</span></a>
+  </div>
+  <div class="btns rv"><a href="dashboard/index.html">Apri la dashboard →</a><a class="alt" href="documenti/Tesina_previsione_consumi_energetici.pdf">Leggi la tesina (PDF) →</a></div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>Anna Sergi</b> · Corso di Perfezionamento in Tecnologie Digitali per Ambienti e Sistemi Intelligenti, Università del Salento · A.A. 2025/2026.<br>
+    Dati pubblici: WWTP Melbourne e UCI Steel Industry Energy Consumption. Fonti e licenze nell’Appendice A della tesina.<br>
+    Le illustrazioni sono disegni esplicativi; tutti i grafici e i numeri provengono dai risultati della tesina.
+  </div>
+</footer>
+<script>
+(function(){
+  var fmt=function(v){return (v>0?'+':v<0?'−':'')+Math.abs(v).toFixed(1).replace('.',',')+'%'};
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- progress bar + rail ----
+  var prog=document.getElementById('progress'), rail=document.getElementById('rail'), hero=document.getElementById('top');
+  var links=Array.prototype.slice.call(rail.querySelectorAll('a'));
+  function onScroll(){
+    var h=document.documentElement, max=h.scrollHeight-h.clientHeight;
+    prog.style.width=(max>0?(h.scrollTop/max*100):0)+'%';
+    rail.classList.toggle('dark',h.scrollTop<hero.offsetHeight-window.innerHeight/2);
+    var cur=null;
+    links.forEach(function(a){var s=document.querySelector(a.getAttribute('href')); if(s&&s.getBoundingClientRect().top<window.innerHeight*.4)cur=a;});
+    links.forEach(function(a){a.classList.toggle('on',a===cur)});
+  }
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+  // ---- reveal on scroll ----
+  var onShow=[];
+  function whenVisible(el,fn){onShow.push([el,fn]);}
+  if('IntersectionObserver' in window && !reduce){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);
+      onShow.forEach(function(p){if(p[0]===e.target||e.target.contains(p[0]))p[1]();});}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+  } else {
+    document.querySelectorAll('.rv').forEach(function(el){el.classList.add('in')});
+    setTimeout(function(){onShow.forEach(function(p){p[1]()})},0);
+  }
+
+  // ---- 18 tiles (Tabella 8 della tesina) ----
+  var algs=['Ridge','Random Forest','Prophet'];
+  var rows=[
+    {ds:'WWTP',h:'breve',c:[[42.1,''],[-2.9,'*'],[4.1,'']]},
+    {ds:'WWTP',h:'medio',c:[[13.6,''],[-0.8,'*'],[-5.6,'']]},
+    {ds:'WWTP',h:'lungo',c:[[15.1,''],[-5.7,''],[48.3,'']]},
+    {ds:'Steel',h:'breve',c:[[0.1,'*'],[1.7,'*'],[-11.3,'†']]},
+    {ds:'Steel',h:'medio',c:[[-0.8,'*'],[0.7,'*'],[60.0,'†']]},
+    {ds:'Steel',h:'lungo',c:[[-1.4,'*'],[0.4,'*'],[19.1,'']]}
+  ];
+  var dsn={WWTP:'Depuratore (WWTP Melbourne)',Steel:'Acciaieria (UCI Steel)'};
+  var tiles=document.getElementById('tiles'), detail=document.getElementById('detail');
+  function color(v,flag){
+    if(flag==='*') return '#e7e9ed';
+    var m=Math.min(Math.abs(v),20)/20, a=0.18+0.62*Math.sqrt(m);
+    return v<0?'rgba(43,122,87,'+a+')':'rgba(180,67,47,'+a+')';
+  }
+  function describe(r,ci){
+    var v=rows[r].c[ci][0], f=rows[r].c[ci][1], alg=algs[ci], ds=rows[r].ds, h=rows[r].h;
+    var win=(ds==='WWTP'&&h==='lungo'&&ci===1);
+    var cls=Math.abs(v)<=2||f==='*'?'flat':(v<0?'good':'bad');
+    var verdict='no', vt='non è un beneficio', txt='';
+    if(win){verdict='yes';vt='unico beneficio rilevante';
+      txt='Migliora di oltre il 2%, è significativo al test di Wilcoxon e batte la persistenza. Ma con un altro modo di validare lo stesso caso peggiora del 7,7%, e il test di Diebold-Mariano è al limite.';}
+    else if(f==='*'){txt='La variazione è entro ±2% oppure non è significativa: l’effetto del dato produttivo è trascurabile.';}
+    else if(alg==='Prophet'&&v<0){txt='B migliora rispetto ad A, ma anche con B Prophet resta peggiore della persistenza: non conta come beneficio.'+(f==='†'?' Inoltre dipende da un solo fold: senza il primo, la variazione è di circa −0,9%.':'');}
+    else if(v>0){txt='Con il dato produttivo l’errore peggiora'+(f==='†'?', ma il valore dipende da un solo fold con poco training (senza il primo, circa −2,1%).':'.');}
+    else {txt='Miglioramento troppo piccolo o non verificato.';}
+    return {v:v,f:f,cls:cls,verdict:verdict,vt:vt,txt:txt,win:win,alg:alg,ds:ds,h:h};
+  }
+  function show(r,ci){
+    var d=describe(r,ci);
+    detail.innerHTML='<p class="where">'+dsn[d.ds]+' · '+d.h+' termine · '+d.alg+'</p>'+
+      '<p class="bignum '+d.cls+'">'+fmt(d.v)+(d.f?'<sup style="font-size:.4em">'+d.f+'</sup>':'')+'</p>'+
+      '<span class="verdict '+d.verdict+'">'+d.vt+'</span><p style="margin:0;font-size:16px">'+d.txt+'</p>';
+    Array.prototype.forEach.call(tiles.querySelectorAll('.tile'),function(t){t.classList.toggle('sel',t.dataset.r==r&&t.dataset.c==ci)});
+  }
+  tiles.appendChild(document.createElement('span'));
+  algs.forEach(function(a){var h=document.createElement('span');h.className='h';h.textContent=a;tiles.appendChild(h)});
+  rows.forEach(function(row,r){
+    if(r===3){var s=document.createElement('span');s.className='sep';tiles.appendChild(s);}
+    var l=document.createElement('span');l.className='rl';l.innerHTML='<span>'+row.ds+'<small>'+row.h+'</small></span>';tiles.appendChild(l);
+    row.c.forEach(function(c,ci){
+      var b=document.createElement('button');b.type='button';b.className='tile';b.dataset.r=r;b.dataset.c=ci;
+      b.style.background=color(c[0],c[1]);
+      var d=describe(r,ci); if(d.win)b.classList.add('win');
+      b.innerHTML=fmt(c[0])+(c[1]?'<sup>'+c[1]+'</sup>':'');
+      b.setAttribute('aria-label',dsn[row.ds]+', '+row.h+' termine, '+algs[ci]+': '+fmt(c[0]));
+      b.addEventListener('click',function(){show(r,ci)});b.addEventListener('mouseenter',function(){show(r,ci)});
+      tiles.appendChild(b);
+    });
+  });
+  show(2,1);
+
+  // ---- imbuto delle tre condizioni ----
+  // indice = riga*3 + algoritmo, nell'ordine delle tessere
+  var stages=[
+    {k:'Partenza',t:'Tutte le sfide',ids:null,who:'2 impianti × 3 algoritmi × 3 orizzonti'},
+    {k:'Porta 1',t:'B migliora più del 2%',ids:[1,5,7,11],who:'RF depuratore breve −2,9% · RF depuratore lungo −5,7% · Prophet depuratore medio −5,6% · Prophet acciaieria breve −11,3%'},
+    {k:'Porta 2',t:'ed è significativo',ids:[5,7,11],who:'esce RF depuratore breve (Wilcoxon p = 0,13)'},
+    {k:'Porta 3',t:'e batte la persistenza',ids:[7],who:'escono i due casi di Prophet, peggiori della persistenza anche con B. Resta RF depuratore lungo: 38.248 contro 52.329 kWh/giorno'}
+  ];
+  var funnel=document.getElementById('funnel'), fd=[];
+  stages.forEach(function(s,si){
+    var row=document.createElement('div');row.className='fstage';
+    var dots='';for(var i=0;i<18;i++)dots+='<i></i>';
+    row.innerHTML='<div class="fl"><b>'+s.k+'</b>'+s.t+'</div><div class="fdots">'+dots+'</div><div class="fn">'+(s.ids?s.ids.length:18)+'</div><div class="who">'+s.who+'</div>';
+    funnel.appendChild(row); fd.push(row.querySelectorAll('.fdots i'));
+  });
+  function fillFunnel(){
+    stages.forEach(function(s,si){
+      Array.prototype.forEach.call(fd[si],function(d,i){
+        var on=!s.ids||s.ids.indexOf(i)>=0;
+        d.style.transitionDelay=reduce?'0s':(si*0.45+i*0.015)+'s';
+        d.className=on?(si===3?'win':'on'):'';
+      });
+    });
+  }
+  whenVisible(funnel.parentNode,fillFunnel);
+
+})();
+</script>
+</body>
+</html>
